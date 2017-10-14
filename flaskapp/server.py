@@ -2,7 +2,7 @@ from werkzeug.utils import secure_filename
 from secrets import AWS_ACCESS_KEY, AWS_SECRET_KEY
 import face_recognition
 from flask import Flask, jsonify, request, redirect, url_for
-from boto3.dynamodb.conditions import Key, Attr
+from boto3.dynamodb.conditions import Key
 import boto3
 import numpy as np
 
@@ -69,7 +69,6 @@ def determine_likes(other_music_taste, current_username):
     mutual = {key:lookup[key] for key in mutual_ids}
     first_three = sorted(mutual, lambda x: x[1])[:3]
     return [lookup[item][0] for item in first_three]
-
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_image():
