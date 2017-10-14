@@ -74,4 +74,5 @@ fastlane/screenshots
 fastlane/test_output
 
 
-flask-app/secrets.py
+flaskapp/secrets.py
+.cache*
