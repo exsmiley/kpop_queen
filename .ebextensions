@@ -1,4 +1,5 @@
 
 packages: 
   yum:
+    cmake: []
     boost-devel: []
