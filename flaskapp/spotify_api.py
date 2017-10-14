@@ -1,11 +1,10 @@
 import spotipy
 import spotipy.util as util
-from boto3.dynamodb.conditions import Key, Attr
+from boto3.dynamodb.conditions import Key
 import boto3
 from secrets import AWS_ACCESS_KEY, AWS_SECRET_KEY
 import face_recognition
 import urllib, cStringIO
-from PIL import Image
 from decimal import Decimal
 
 REGION="us-east-1"
