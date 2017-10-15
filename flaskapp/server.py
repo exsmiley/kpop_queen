@@ -50,7 +50,10 @@ def kpop_fun():
         if file and allowed_file(file.filename):
             # The image file seems valid! Detect faces and return the result.
             file.filename = secure_filename(file.filename)
-            results = kpop_sim.get_most_similar(file)
+            try:
+                results = kpop_sim.get_most_similar(file)
+            except:
+                return 'No face can be detected :O'
             return jsonify(results)
 
     # If no valid image file was uploaded, show the file upload form:
@@ -59,7 +62,6 @@ def kpop_fun():
     <title>Augmented Reality</title>
     <h1>Upload a picture and find out a which Kpop star you are!</h1>
     <form method="POST" enctype="multipart/form-data">
-        <input type="text" name="username">
         <input type="file" name="file">
         <input type="submit" value="Upload">
     </form>
