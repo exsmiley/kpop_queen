@@ -42,7 +42,6 @@ def kpop_fun():
             return redirect(request.url)
 
         file = request.files['file']
-        print file
 
         if file.filename == '':
             return redirect(request.url)
@@ -50,10 +49,14 @@ def kpop_fun():
         if file and allowed_file(file.filename):
             # The image file seems valid! Detect faces and return the result.
             file.filename = secure_filename(file.filename)
+            file.save('derp.png')
+            print file.filename
             try:
                 results = kpop_sim.get_most_similar(file)
+                print results
             except:
-                return 'No face can be detected :O'
+                print 'err'
+                return jsonify({'error': True})
             return jsonify(results)
 
     # If no valid image file was uploaded, show the file upload form:

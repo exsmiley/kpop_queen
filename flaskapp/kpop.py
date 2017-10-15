@@ -1,6 +1,7 @@
 import face_recognition
 from os import listdir, remove
 import numpy as np
+import scipy
 
 
 def transform_name(x):
@@ -49,12 +50,15 @@ def load_encodings(fname='kpopEncodings.txt'):
     return names, encodings
 
 
-def get_most_similar(encodings, names, img):
+def get_most_similar(encodings, names, img, rotate=False):
     img = face_recognition.load_image_file(img)
+    if rotate:
+        # rotate 90 degrees counterclockwise
+        img = np.swapaxes(img, 0, 1)
     unknown_encoding = face_recognition.face_encodings(img)[0]
     results = face_recognition.face_distance(encodings, unknown_encoding)
     r = np.argmin(results)
-    return {'name': names[r], 'score': results[r]}
+    return {'name': names[r], 'score': results[r], 'error': False}
 
 
 class KpopSimilarity(object):
@@ -63,10 +67,15 @@ class KpopSimilarity(object):
         self.names, self.encodings = load_encodings()
 
     def get_most_similar(self, img):
-        return get_most_similar(self.encodings, self.names, img)
+        return get_most_similar(self.encodings, self.names, img, rotate=True)
 
 
 if __name__ == '__main__':
     # names, encodings = load_encodings_from_images()
     # save_encodings(names, encodings)
     n, e = load_encodings()
+    # img = face_recognition.load_image_file('jatin.jpg')
+    # unknown_encoding = face_recognition.face_encodings(img)[0]
+
+    print get_most_similar(e, n, 'derp.png', rotate=True)
+
