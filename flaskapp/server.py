@@ -36,6 +36,9 @@ def hello():
 
 @app.route('/kpop', methods=['GET', 'POST'])
 def kpop_fun():
+    rotate = False
+    if not 'localhost' in request.host_url:
+        rotate = True
     if request.method == 'POST':
         print request.files
         if 'file' not in request.files:
@@ -52,27 +55,23 @@ def kpop_fun():
             file.save('derp.png')
             print file.filename
             try:
-                results = kpop_sim.get_most_similar(file)
+                results = kpop_sim.get_most_similar(file, rotate=rotate)
                 print results
             except:
                 print 'err'
-                return jsonify({'error': True})
+                return jsonify({'error': str(True), 'name': ''})
             return jsonify(results)
 
     # If no valid image file was uploaded, show the file upload form:
     return '''
     <!doctype html>
     <title>Augmented Reality</title>
-    <h1>Upload a picture and find out a which Kpop star you are!</h1>
+    <h1>Upload a picture and find out which Kpop star you are!</h1>
     <form method="POST" enctype="multipart/form-data">
         <input type="file" name="file">
         <input type="submit" value="Upload">
     </form>
     '''
-
-
-
-    return "I'm a beaver"
 
 
 def allowed_file(filename):
