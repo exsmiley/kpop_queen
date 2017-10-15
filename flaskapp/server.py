@@ -6,6 +6,7 @@ from boto3.dynamodb.conditions import Key
 import boto3
 import numpy as np
 from spotify_api import get_user_info
+from kpop import KpopSimilarity
 
 REGION="us-east-1"
 
@@ -23,7 +24,7 @@ BUCKET = 'spotify-profile-pictures'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 app = Flask(__name__)
-
+kpop_sim = KpopSimilarity()
 
 # @app.route('/')
 # def connect_spotify():
@@ -32,6 +33,41 @@ app = Flask(__name__)
 @app.route("/connect")
 def hello():
     return 'Hello world'
+
+@app.route('/kpop', methods=['GET', 'POST'])
+def kpop_fun():
+    if request.method == 'POST':
+        print request.files
+        if 'file' not in request.files:
+            return redirect(request.url)
+
+        file = request.files['file']
+        print file
+
+        if file.filename == '':
+            return redirect(request.url)
+
+        if file and allowed_file(file.filename):
+            # The image file seems valid! Detect faces and return the result.
+            file.filename = secure_filename(file.filename)
+            results = kpop_sim.get_most_similar(file)
+            return jsonify(results)
+
+    # If no valid image file was uploaded, show the file upload form:
+    return '''
+    <!doctype html>
+    <title>Augmented Reality</title>
+    <h1>Upload a picture and find out a which Kpop star you are!</h1>
+    <form method="POST" enctype="multipart/form-data">
+        <input type="text" name="username">
+        <input type="file" name="file">
+        <input type="submit" value="Upload">
+    </form>
+    '''
+
+
+
+    return "I'm a beaver"
 
 
 def allowed_file(filename):

@@ -54,8 +54,7 @@ def get_most_similar(encodings, names, img):
     unknown_encoding = face_recognition.face_encodings(img)[0]
     results = face_recognition.face_distance(encodings, unknown_encoding)
     r = np.argmin(results)
-    print results[r]
-    return names[r]
+    return {'name': names[r], 'score': results[r]}
 
 
 class KpopSimilarity(object):
@@ -64,13 +63,10 @@ class KpopSimilarity(object):
         self.names, self.encodings = load_encodings()
 
     def get_most_similar(self, img):
-        return get_most_similar(encodings, names, img)
+        return get_most_similar(self.encodings, self.names, img)
 
 
 if __name__ == '__main__':
     # names, encodings = load_encodings_from_images()
     # save_encodings(names, encodings)
     n, e = load_encodings()
-    print get_most_similar(e, n, 'grace.jpg')
-
-
