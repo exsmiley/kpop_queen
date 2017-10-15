@@ -4,6 +4,7 @@ include/
 lib/
 .Python
 pip-selfcheck.json
+.DS_Store
 
 # Xcode
 #

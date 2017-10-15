@@ -5,6 +5,7 @@ from flask import Flask, jsonify, request, redirect, url_for
 from boto3.dynamodb.conditions import Key
 import boto3
 import numpy as np
+from spotify_api import get_user_info
 
 REGION="us-east-1"
 
@@ -22,6 +23,11 @@ BUCKET = 'spotify-profile-pictures'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 app = Flask(__name__)
+
+
+# @app.route('/')
+# def connect_spotify():
+#     get_user_info('exsmiley')
 
 @app.route("/connect")
 def hello():
@@ -150,4 +156,4 @@ def detect_faces_in_image(file_stream):
     return None
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8000)
+    app.run(debug=True, port=8000, host='0.0.0.0')
